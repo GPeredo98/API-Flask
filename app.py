@@ -12,7 +12,7 @@ def create_app(config_file='settings.py'):
     with application.app_context():
         db.create_all()
     ma.init_app(application)
-    application.register_blueprint(productos, url_prefix='/product')
+    application.register_blueprint(productos, url_prefix='/producto')
     return application
 
 

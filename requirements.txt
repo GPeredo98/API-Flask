@@ -1,6 +1,4 @@
-cffi==1.14.4
 click==7.1.2
-cryptography==3.3.1
 Flask==1.1.2
 Flask-Cors==3.0.9
 flask-marshmallow==0.14.0
@@ -9,6 +7,7 @@ itsdangerous==1.1.0
 Jinja2==2.11.2
 MarkupSafe==1.1.1
 marshmallow==3.9.1
+marshmallow-enum==1.5.1
 marshmallow-sqlalchemy==0.24.1
 pycparser==2.20
 PyMySQL==0.10.1

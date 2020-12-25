@@ -36,7 +36,8 @@ def agregar_producto():
         categoria = request.json['categoria']
         precio = request.json['precio']
         cantidad = request.json['cantidad']
-        nuevo_producto = Producto(nombre, descripcion, categoria, precio, cantidad)
+        disponible = request.json['disponible']
+        nuevo_producto = Producto(nombre, descripcion, categoria, precio, cantidad, disponible)
         db.session.add(nuevo_producto)
         db.session.commit()
         return jsonify({'data': producto_schema.dump(nuevo_producto), 'success': True, 'message': 'Producto agregado'})
@@ -45,9 +46,9 @@ def agregar_producto():
 
 
 @productos.route('/<int:id_producto>', methods=['PUT'])
-def editar_producto(id_product):
+def editar_producto(id_producto):
     try:
-        producto = Producto.query.get(id_product)
+        producto = Producto.query.get(id_producto)
 
         if producto is not None:
             producto.nombre = request.json['nombre'] if 'nombre' in request.json else producto.nombre
@@ -55,6 +56,7 @@ def editar_producto(id_product):
             producto.categoria = request.json['categoria'] if 'categoria' in request.json else producto.categoria
             producto.precio = request.json['precio'] if 'precio' in request.json else producto.precio
             producto.cantidad = request.json['cantidad'] if 'cantidad' in request.json else producto.cantidad
+            producto.disponible = request.json['disponible'] if 'disponible' in request.json else producto.disponible
             db.session.commit()
             return jsonify({'data': producto_schema.dump(producto), 'success': True, 'message': 'Producto actualizado'})
         else:
@@ -64,9 +66,9 @@ def editar_producto(id_product):
 
 
 @productos.route('/<int:id_producto>', methods=['DELETE'])
-def delete_product(id_product):
+def delete_product(id_producto):
     try:
-        producto = Producto.query.get(id_product)
+        producto = Producto.query.get(id_producto)
         if producto is not None:
             db.session.delete(producto)
             db.session.commit()
