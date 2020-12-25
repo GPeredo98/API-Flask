@@ -66,13 +66,27 @@ def editar_producto(id_producto):
 
 
 @productos.route('/<int:id_producto>', methods=['DELETE'])
-def delete_product(id_producto):
+def eliminar_producto(id_producto):
     try:
         producto = Producto.query.get(id_producto)
         if producto is not None:
             db.session.delete(producto)
             db.session.commit()
             return jsonify({'data': Producto.Schema().dump(producto), 'success': True, 'message': 'Producto eliminado'})
+        else:
+            return jsonify({'data': None, 'success': False, 'message': 'Producto no encontrado'})
+    except Exception as e:
+        return jsonify({'data': str(e), 'success': False, 'message': 'Ocurrió un error en el servidor'})
+
+
+@productos.route('/cambiar_estado/<int:id_producto>', methods=['PATCH'])
+def cambiar_estado_producto(id_producto):
+    try:
+        producto = Producto.query.get(id_producto)
+        if producto is not None:
+            producto.disponible = not producto.disponible
+            db.session.commit()
+            return jsonify({'data': Producto.Schema().dump(producto), 'success': True, 'message': 'Estado cambiado'})
         else:
             return jsonify({'data': None, 'success': False, 'message': 'Producto no encontrado'})
     except Exception as e:
