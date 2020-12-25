@@ -1,6 +1,18 @@
 from database import db, ma
 from marshmallow_enum import EnumField
 import enum
+from datetime import datetime
+
+
+# Serializador de objetos
+def add_schema(**kwgs):
+    def decorator(cls):
+        class Meta:
+            model = cls
+        schema = type("Schema", (ma.SQLAlchemyAutoSchema,), {"Meta": Meta, **kwgs})
+        cls.Schema = schema
+        return cls
+    return decorator
 
 
 class ProductoCategorias(enum.Enum):
@@ -12,17 +24,19 @@ class ProductoCategorias(enum.Enum):
     TECNOLOGIA = 6
 
 
+@add_schema(categoria=EnumField(ProductoCategorias, by_value=True))
 class Producto(db.Model):
 
     __tablename__ = 'productos'
 
     id = db.Column(db.Integer, primary_key=True)
-    nombre = db.Column(db.String(100))
+    nombre = db.Column(db.String(100), nullable=False, unique=True)
     descripcion = db.Column(db.Text)
     categoria = db.Column(db.Enum(ProductoCategorias))
-    precio = db.Column(db.Integer)
-    cantidad = db.Column(db.Integer)
+    precio = db.Column(db.Integer, nullable=False)
+    cantidad = db.Column(db.Integer, nullable=False)
     disponible = db.Column(db.BOOLEAN, default=0)
+    fecha_creacion = db.Column(db.DateTime, default=datetime.now())
 
     def __init__(self, nombre, descripcion, categoria, precio, cantidad, disponible):
         self.nombre = nombre
@@ -34,14 +48,3 @@ class Producto(db.Model):
 
     def __str__(self):
         return self.nombre
-
-
-class ProductoSchema(ma.Schema):
-    categoria = EnumField(ProductoCategorias, by_value=True)
-
-    class Meta:
-        fields = ('id', 'nombre', 'descripcion', 'categoria', 'precio', 'cantidad', 'disponible')
-
-
-producto_schema = ProductoSchema()
-productos_schema = ProductoSchema(many=True)
