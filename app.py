@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 from database import db, ma
+from productos.views import productos
 
 
 def create_app(config_file='settings.py'):
@@ -11,7 +12,7 @@ def create_app(config_file='settings.py'):
     with application.app_context():
         db.create_all()
     ma.init_app(application)
-    # application.register_blueprint(products, url_prefix='/product')
+    application.register_blueprint(productos, url_prefix='/product')
     return application
 
 
