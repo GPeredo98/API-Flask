@@ -37,7 +37,8 @@ def agregar_producto():
         precio = request.json['precio']
         cantidad = request.json['cantidad']
         disponible = request.json['disponible']
-        nuevo_producto = Producto(nombre, descripcion, categoria, precio, cantidad, disponible)
+        imagen = request.json['imagen']
+        nuevo_producto = Producto(nombre, descripcion, categoria, precio, cantidad, disponible, imagen)
         db.session.add(nuevo_producto)
         db.session.commit()
         return jsonify({'data': Producto.Schema().dump(nuevo_producto), 'success': True, 'message': 'Producto agregado'})
@@ -57,6 +58,7 @@ def editar_producto(id_producto):
             producto.precio = request.json['precio'] if 'precio' in request.json else producto.precio
             producto.cantidad = request.json['cantidad'] if 'cantidad' in request.json else producto.cantidad
             producto.disponible = request.json['disponible'] if 'disponible' in request.json else producto.disponible
+            producto.imagen = request.json['imagen'] if 'imagen' in request.json else producto.imagen
             db.session.commit()
             return jsonify({'data': Producto.Schema().dump(producto), 'success': True, 'message': 'Producto actualizado'})
         else:
