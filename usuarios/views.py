@@ -33,8 +33,7 @@ def registrar_usuario():
         nuevo_usuario = Usuario(nombres, apellidos, telefono, correo, contrasenha_hasheada, estado, imagen)
         db.session.add(nuevo_usuario)
         db.session.commit()
-        return jsonify(
-            {'data': Usuario.Schema().dump(nuevo_usuario), 'success': True, 'message': 'Usuario registrado'})
+        return jsonify({'data': Usuario.Schema().dump(nuevo_usuario), 'success': True, 'message': 'Usuario registrado'})
     except Exception as e:
         return jsonify({'data': str(e), 'success': False, 'message': 'Ocurrió un error en el servidor'})
 
@@ -50,8 +49,8 @@ def login():
             if bcrypt.checkpw(contrasenha.encode('utf-8'), usuario.contrasenha.encode('utf-8')):
                 return jsonify({'data': Usuario.Schema().dump(usuario), 'success': True, 'message': 'Bienvenido'})
             else:
-                return jsonify({'data': None, 'success': True, 'message': 'La contraseña es incorrecta'})
+                return jsonify({'data': None, 'success': False, 'message': 'La contraseña es incorrecta'})
         else:
-            return jsonify({'data': '', 'success': True, 'message': 'El correo no pertenece a un usuario existente'})
+            return jsonify({'data': '', 'success': False, 'message': 'El correo no pertenece a un usuario existente'})
     except Exception as e:
         return jsonify({'data': str(e), 'success': False, 'message': 'Ocurrió un error en el servidor'})
