@@ -1,4 +1,4 @@
-from database import db, add_schema
+from utilities import db, add_schema
 from datetime import datetime
 
 
