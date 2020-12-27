@@ -1,4 +1,4 @@
-from database import db, ma, add_schema
+from database import db, add_schema
 from marshmallow_enum import EnumField
 import enum
 from datetime import datetime

@@ -52,13 +52,13 @@ def editar_producto(id_producto):
         producto = Producto.query.get(id_producto)
 
         if producto is not None:
-            producto.nombre = request.json['nombre'] if 'nombre' in request.json else producto.nombre
-            producto.descripcion = request.json['descripcion'] if 'descripcion' in request.json else producto.descripcion
-            producto.categoria = request.json['categoria'] if 'categoria' in request.json else producto.categoria
-            producto.precio = request.json['precio'] if 'precio' in request.json else producto.precio
-            producto.cantidad = request.json['cantidad'] if 'cantidad' in request.json else producto.cantidad
-            producto.disponible = request.json['disponible'] if 'disponible' in request.json else producto.disponible
-            producto.imagen = request.json['imagen'] if 'imagen' in request.json else producto.imagen
+            producto.nombre = request.json.get('nombre', producto.nombre)
+            producto.descripcion = request.json.get('descripcion', producto.descripcion)
+            producto.categoria = request.json.get('categoria', producto.categoria)
+            producto.precio = request.json.get('precio', producto.precio)
+            producto.cantidad = request.json.get('cantidad', producto.cantidad)
+            producto.disponible = request.json.get('disponible', producto.disponible)
+            producto.imagen = request.json.get('imagen', producto.imagen)
             db.session.commit()
             return jsonify({'data': Producto.Schema().dump(producto), 'success': True, 'message': 'Producto actualizado'})
         else:
